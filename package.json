@@ -1,0 +1,12 @@
+{
+    "name": "devnull"
+  , "version": "0.0.1"
+  , "description": "A simple logger with automatic function detection."
+  , "homepage": "http://observer.no.de"
+  , "keywords": ["log", "logger", "logging", "dev/null"]
+  , "repository": {
+          "type": "git"
+        , "url": "https://github.com/observing/devnull.git"
+      }
+  , "main": "index"
+}
