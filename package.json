@@ -9,5 +9,10 @@
           "type": "git"
         , "url": "https://github.com/observing/devnull.git"
       }
+  , "devDependencies": {
+        "should": "0.3.1"
+      , "expresso": "0.8.1"
+      , "long-stack-traces": "0.1.2"
+    }
   , "main": "index"
 }
