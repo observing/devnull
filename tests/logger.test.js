@@ -118,7 +118,8 @@ describe('dev/null, logger', function () {
 
       logger.level.should.equal(0)
       logger.pattern.should.equal('pew pew')
-      Object.prototype.toString.call(logger.introduced).should.equal('[object Undefined]')
+
+      require('should').not.exist(logger.introduced)
     })
   })
 
