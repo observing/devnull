@@ -12,6 +12,7 @@
   , "devDependencies": {
         "mocha": "*"
       , "should": "0.3.2"
+      , "long-stack-traces": "0.1.2"
     }
   , "main": "index"
   , "scripts": {
