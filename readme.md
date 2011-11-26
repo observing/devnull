@@ -1,4 +1,4 @@
-# dev/null (because logging to /dev/null is really fast!)
+# dev/null (because logging to /dev/null is really fast!) [![BuildStatus](https://secure.travis-ci.org/observing/devnull.png)](http://travis-ci.org/observing/devnull)
 
 **devnull** is an advanced logging module for Node.js it was designed from the
 ground up to assist you during development and powerful in production. It works

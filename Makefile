@@ -1,10 +1,11 @@
 ALL_TESTS = $(shell find tests/ -name '*.test.js')
 REPORTER = spec
-UI = exports
+UI = bdd
 
 test:
 	@./node_modules/.bin/mocha \
 		--require should \
+		--require $(shell pwd)/tests/common \
 		--reporter $(REPORTER) \
 		--ui $(UI) \
 		--growl \

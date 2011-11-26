@@ -9,6 +9,9 @@
           "type": "git"
         , "url": "https://github.com/observing/devnull.git"
       }
+  , "dependencies": {
+        "colors": "0.5.1"
+    }
   , "devDependencies": {
         "mocha": "*"
       , "should": "0.3.2"
