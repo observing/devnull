@@ -9,5 +9,12 @@
           "type": "git"
         , "url": "https://github.com/observing/devnull.git"
       }
+  , "devDependencies": {
+        "mocha": "*"
+      , "should": "0.3.2"
+    }
   , "main": "index"
+  , "scripts": {
+        "test": "make test"
+    }
 }
