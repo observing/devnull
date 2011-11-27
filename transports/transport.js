@@ -53,11 +53,11 @@ Transport.prototype.__proto__ = EventEmitter.prototype;
  *
  * @param {String} type log type
  * @param {String} namespace namespace
- * @param {String} timestamp stamp
+ * @param {Array} args arguments
  * @api public
  */
 
-Transport.prototype.write = function write (type, namespace, timestamp) {};
+Transport.prototype.write = function write (type, namespace, args) {};
 
 /**
  * The transport needs to be removed

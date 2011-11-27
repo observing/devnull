@@ -11,8 +11,13 @@ var Transport = require('./transport')
  */
 
 var Streamer = module.exports = function streamer (logger, options) {
-  this.logger = logger;
-  this.stream = options.stream || process.stdout;
+  // properties that could be overriden
+  this.stream = process.stdout;
+
+  Transport.apply(this, arguments);
+
+  // set the correct name
+  this.name = 'streamer';
 };
 
 /**
@@ -26,20 +31,20 @@ util.inherits(Streamer, Transport);
  *
  * @param {String} type
  * @param {String} namespace
- * @param {String} timestamp
  * @api public
  */
 
-Streamer.prototype.write = function write (type, namespace, timestamp, args) {
+Streamer.prototype.write = function write (type, namespace, args) {
   if (this.stream.writable) {
     this.stream.write(
-        stamp
+        this.logger.stamp()
       + ' '
       + this.logger.prefix[type]
       + ' ('
       + namespace
-      + ')'
-      + this.logger.format(args)
+      + ') '
+      + this.logger.format.apply(this, args)
+      + '\n'
     );
   }
 };

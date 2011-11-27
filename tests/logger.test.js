@@ -121,6 +121,19 @@ describe('dev/null, logger', function () {
 
       require('should').not.exist(logger.introduced)
     })
+
+    it('should have the same log methods as levels', function () {
+      var logger = new Logger
+        , levels = Object.keys(Logger.levels)
+        , asserts = 0
+
+      levels.forEach(function (key) {
+        logger.should.respondTo(key)
+        ++asserts
+      })
+
+      asserts.should.be.above(2)
+    })
   })
 
   describe('#configure', function () {
@@ -178,7 +191,7 @@ describe('dev/null, logger', function () {
 
   describe('#use', function () {
     it('should execute the given function', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
         , asserts = 0
 
@@ -192,7 +205,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should executed function should receive arguments', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
         , asserts = 0
 
@@ -209,7 +222,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should add the transport to the transports array', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
         , asserts = 0
 
@@ -225,7 +238,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should create a new instance of the function', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
         , asserts = 0
 
@@ -240,7 +253,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should only add functions', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
 
       logger.transports.length.should.equal(0)
 
@@ -264,7 +277,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should return a logger instance', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , use = logger.use(function () {})
 
       use.should.equal(logger)
@@ -273,20 +286,20 @@ describe('dev/null, logger', function () {
 
   describe('#has', function () {
     it('should return a boolean for failures', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
 
       logger.has('a').should.be.a('boolean')
       logger.has('b').should.be.false
     })
 
     it('should not throw without when called without arguments', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
 
       logger.has().should.be.a('boolean')
     })
 
     it('should return the found instance', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
 
       logger.use(transport.dummy)
@@ -294,7 +307,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should return the found match, if it equals the argument', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , dummy = function () {}
 
       logger.transports.push(dummy)
@@ -304,7 +317,7 @@ describe('dev/null, logger', function () {
 
   describe('#remove', function () {
     it('should call the .destroy method of the instance', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
         , asserts = 0
 
@@ -319,7 +332,7 @@ describe('dev/null, logger', function () {
     })
 
     it('should remove the transport from the transports array', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
         , transport = fixtures.transport()
         , asserts = 0
 
@@ -338,9 +351,24 @@ describe('dev/null, logger', function () {
     })
 
     it('should return a logger instance when nothing is found', function () {
-      var logger = new Logger
+      var logger = new Logger({ base:false })
 
       logger.remove().should.equal(logger)
+    })
+
+    it('should only remove the given logger instance', function () {
+      var logger = new Logger
+        , transport = fixtures.transport()
+        , base = require('../transports/stream')
+
+      logger.transports.length.should.equal(1)
+
+      logger.use(transport.dummy)
+      logger.transports.length.should.equal(2)
+
+      logger.remove(transport.dummy)
+      logger.transports.length.should.equal(1)
+      logger.transports.pop().should.be.an.instanceof(base)
     })
   })
 

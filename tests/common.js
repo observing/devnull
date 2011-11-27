@@ -40,10 +40,9 @@ fixtures.transport = function () {
     }
   }
 
-
   // return the fake transport
   return {
       on: function (name, fn) { EE.on(name, fn) }
     , dummy: dummy
   }
-}
+};
