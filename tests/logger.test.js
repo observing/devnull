@@ -155,7 +155,7 @@ describe('dev/null, logger', function () {
         , asserts = 0
 
       logger.env.should.be.a('string')
-      logger.env = 'production';
+      logger.env = 'production'
 
       logger.configure(function () {
         ++asserts

@@ -1,3 +1,9 @@
+/**!
+ * dev/null
+ * @copyright (c) 2011 observe.it (observe.it) <arnout@observe.com>
+ * mit licensed
+ */
+
 var Transport = require('./transport')
   , util = require('util');
 
@@ -47,4 +53,16 @@ Streamer.prototype.write = function write (type, namespace, args) {
       + '\n'
     );
   }
+
+  return this;
 };
+
+Streamer.prototype.close = function () {
+  // don't close the stdout
+  if (this.stream === process.stdout) return this;
+
+  if (this.stream.end) {
+    try { this.stream.end() }
+    catch (e) {}
+  }
+}

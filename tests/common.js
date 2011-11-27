@@ -19,8 +19,13 @@ Transports = require('../transports/');
  */
 
 fixtures = {};
+
+/**
+ * Produce a dummy transport that emits events for each called method.
+ */
+
 fixtures.transport = function () {
-  var EE = new EventEmitter();
+  var EE = new EventEmitter;
 
   /**
    * A small evented dummy that allows us to listen to different events
@@ -39,6 +44,39 @@ fixtures.transport = function () {
       EE.emit.apply(EE, ['write'].concat(slice.call(arguments)));
     }
   }
+
+  // return the fake transport
+  return {
+      on: function (name, fn) { EE.on(name, fn) }
+    , dummy: dummy
+  }
+};
+
+/**
+ * Produce a dummy stream that emits events for each called method.
+ */
+
+fixtures.stream = function () {
+  var EE = new EventEmitter;
+
+  /**
+   * A small evented dummy that allows us to listen to different events, it
+   * needs to be an object.. As streams are seen as objects as well
+   *
+   * @api private
+   */
+
+  var dummy = {
+      writable: true
+
+    , end: function close () {
+        EE.emit.apply(EE, ['end'].concat(slice.call(arguments)));
+      }
+
+    , write: function write () {
+        EE.emit.apply(EE, ['write'].concat(slice.call(arguments)));
+      }
+  };
 
   // return the fake transport
   return {

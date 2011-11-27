@@ -23,7 +23,6 @@ function type (prop) {
 
 var Transport = module.exports = function transport (logger, options) {
   options = options || {};
-
   this.name = 'transport';
 
   // override the defaults, but not the methods and they should also be the
