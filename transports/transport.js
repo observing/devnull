@@ -1,6 +1,19 @@
 var EventEmitter = process.EventEmitter;
 
 /**
+ * Strict type checking.
+ *
+ * @param {Mixed} prop
+ * @returns {String}
+ * @api private
+ */
+
+function type (prop) {
+  var rs = Object.prototype.toString.call(prop);
+  return rs.slice(8, rs.length - 1).toLowerCase()
+}
+
+/**
  * The base setup.
  *
  * @constructor
@@ -8,13 +21,28 @@ var EventEmitter = process.EventEmitter;
  * @api private
  */
 
-var Transport = module.exports = function transport (options) {
+var Transport = module.exports = function transport (logger, options) {
   options = options || {};
 
   this.name = 'transport';
 
-  // extend
-  for (var key in options) this[key] = options[key];
+  // override the defaults, but not the methods and they should also be the
+  // exact same type
+  for (var key in options) {
+    if (key in this
+      && type(this[key]) !== 'function'
+      && type(this[key]) === type(options[key])
+    ) {
+      this[key] = options[key];
+    }
+  }
+
+  // should not be overridden by the options
+  this.logger = logger;
+
+  if (this.initialize) {
+    this.initialize.call(this, options);
+  }
 };
 
 Transport.prototype.__proto__ = EventEmitter.prototype;
@@ -30,3 +58,11 @@ Transport.prototype.__proto__ = EventEmitter.prototype;
  */
 
 Transport.prototype.write = function write (type, namespace, timestamp) {};
+
+/**
+ * The transport needs to be removed
+ *
+ * @api public
+ */
+
+Transport.prototype.close = function close () {}

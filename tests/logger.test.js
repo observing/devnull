@@ -179,38 +179,46 @@ describe('dev/null, logger', function () {
   describe('#use', function () {
     it('should execute the given function', function () {
       var logger = new Logger
+        , transport = fixtures.transport()
         , asserts = 0
 
-      logger.use(function () {
+      transport.on('initialize', function () {
         ++asserts
       })
+
+      logger.use(transport.dummy)
 
       asserts.should.equal(1)
     })
 
     it('should executed function should receive arguments', function () {
       var logger = new Logger
+        , transport = fixtures.transport()
         , asserts = 0
 
-      logger.use(function (self, options) {
+      transport.on('initialize', function (self, options) {
         ++asserts
 
         self.should.equal(logger)
         options.foo.should.equal('bar')
-      }, { foo:'bar' })
+      })
+
+      logger.use(transport.dummy, { foo:'bar' })
 
       asserts.should.equal(1)
     })
 
     it('should add the transport to the transports array', function () {
       var logger = new Logger
+        , transport = fixtures.transport()
         , asserts = 0
-        , example = function () {
-            ++asserts
-          }
+
+      transport.on('initialize', function () {
+        ++asserts
+      })
 
       logger.transports.length.should.equal(0)
-      logger.use(example)
+      logger.use(transport.dummy)
       logger.transports.length.should.equal(1)
 
       asserts.should.equal(1)
@@ -218,13 +226,15 @@ describe('dev/null, logger', function () {
 
     it('should create a new instance of the function', function () {
       var logger = new Logger
+        , transport = fixtures.transport()
         , asserts = 0
-        , example = function () {
-            ++asserts
-          }
 
-      logger.use(example)
-      logger.transports[0].should.be.an.instanceof(example)
+      transport.on('initialize', function () {
+        ++asserts
+      })
+
+      logger.use(transport.dummy)
+      logger.transports[0].should.be.an.instanceof(transport.dummy)
 
       asserts.should.equal(1)
     })
@@ -277,51 +287,54 @@ describe('dev/null, logger', function () {
 
     it('should return the found instance', function () {
       var logger = new Logger
-        , example = function () {}
+        , transport = fixtures.transport()
 
-      logger.use(example)
-      logger.has(example).should.be.an.instanceof(example)
+      logger.use(transport.dummy)
+      logger.has(transport.dummy).should.be.an.instanceof(transport.dummy)
     })
 
     it('should return the found match, if it equals the argument', function () {
       var logger = new Logger
-        , fixture = function () {}
+        , dummy = function () {}
 
-      logger.transports.push(fixture)
-      logger.has(fixture).should.equal(fixture)
+      logger.transports.push(dummy)
+      logger.has(dummy).should.equal(dummy)
     })
   })
 
   describe('#remove', function () {
     it('should call the .destroy method of the instance', function () {
       var logger = new Logger
+        , transport = fixtures.transport()
         , asserts = 0
-        , example = function () {
-            this.destroy = function () {
-              ++asserts
-            }
-          }
 
-      logger.use(example)
-      logger.remove(example)
+      transport.on('close', function () {
+        ++asserts
+      })
+
+      logger.use(transport.dummy)
+      logger.remove(transport.dummy)
 
       asserts.should.equal(1)
     })
 
     it('should remove the transport from the transports array', function () {
       var logger = new Logger
-        , example = function () {
-            this.destroy = function () {
-            }
-          }
+        , transport = fixtures.transport()
+        , asserts = 0
 
-      logger.use(example)
+      transport.on('close', function () {
+        ++asserts
+      })
+
+      logger.use(transport.dummy)
       logger.transports.length.should.equal(1)
 
-      var rm = logger.remove(example)
+      var rm = logger.remove(transport.dummy)
       logger.transports.length.should.equal(0)
 
       rm.should.equal(logger)
+      asserts.should.equal(1)
     })
 
     it('should return a logger instance when nothing is found', function () {
