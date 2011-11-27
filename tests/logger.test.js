@@ -416,4 +416,78 @@ describe('dev/null, logger', function () {
       logger.stamp(date).should.equal('hello <b>world</b> its ' + date.getFullYear())
     })
   })
+
+  describe('.notification', function () {
+    it('should default to warnings', function () {
+      var logger = new Logger;
+
+      logger.notification.should.equal(Logger.levels.warning)
+    })
+
+    it('should emit events when the notification log level is used', function () {
+      var stream = fixtures.stream()
+        , logger = new Logger({ base:false })
+        , asserts = 0;
+
+      logger.use(Transport.stream, { stream: stream.dummy })
+
+      logger.on('warning', function (args, stack) {
+        args[0].should.equal('foo bar')
+        args[1].should.equal('ping ping')
+        ++asserts
+      })
+
+      logger.warning('foo bar', 'ping ping')
+      asserts.should.equal(1)
+    })
+
+    it('should only emit logs <= notification level', function () {
+      var stream = fixtures.stream()
+        , logger = new Logger({ base:false })
+        , asserts = 0;
+
+      logger.use(Transport.stream, { stream: stream.dummy })
+
+      logger.on('warning', function () {
+        ++asserts
+      })
+
+      logger.on('error', function () {
+        ++asserts
+      })
+
+      logger.on('metric', function () {
+        should.fail('should not run')
+      })
+
+      logger.warning('is eaual to the notification level')
+      logger.metric('is higher then the notification level')
+      logger.error('is lower then the notification level')
+
+      asserts.should.equal(2)
+    })
+
+    it('the level should configurable', function () {
+      var stream = fixtures.stream()
+        , logger = new Logger({
+              base:false
+            , notification: 1
+          })
+        , asserts = 0;
+
+      logger.use(Transport.stream, { stream: stream.dummy })
+
+      logger.on('critical', function (args, stack) {
+        ++asserts
+      })
+
+      logger.on('warning', function (args, stack) {
+        should.fail('should not run')
+      })
+
+      logger.warning('foo bar', 'ping ping')
+      logger.critical('i should trigger the shizz')
+      asserts.should.equal(1)
+    })
+  })
 })

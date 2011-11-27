@@ -1,15 +1,20 @@
+"use strict";
+
 /**!
  * dev/null
  * @copyright (c) 2011 observe.it (observe.it) <arnout@observe.com>
  * mit licensed
  */
 
-var Transport = require('./transport')
-  , util = require('util');
+var Transport = require('./transport');
 
 /**
  * A streaming tranport module for the logger, it should work with every node.js
  * stream that uses the standard write interface.
+ *
+ * Options:
+ *
+ * - `stream` A node.js compatible stream, defaults to process.stdout
  *
  * @param {Stream} stream
  * @param {Object} options
@@ -24,16 +29,16 @@ var Streamer = module.exports = function streamer (logger, options) {
 
   // set the correct name
   this.name = 'streamer';
-};
+}
 
 /**
- * Inherit from `Transport`
+ * Inherit from `Transport`.
  */
 
-util.inherits(Streamer, Transport);
+require('util').inherits(Streamer, Transport);
 
 /**
- * Write the dataz
+ * Try to write out the data to the stream.
  *
  * @param {String} type
  * @param {String} namespace
@@ -65,4 +70,4 @@ Streamer.prototype.close = function () {
     try { this.stream.end() }
     catch (e) {}
   }
-}
+};

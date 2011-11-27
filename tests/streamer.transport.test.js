@@ -75,10 +75,6 @@ describe('streamer.transport', function () {
   })
 
   describe('#close', function () {
-    it('should not close the process.stdout', function () {
-
-    })
-
     it('should trigger the end method of a stream', function () {
       var stream = fixtures.stream()
         , logger = new Logger({ base: false })

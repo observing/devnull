@@ -16,6 +16,17 @@ Object.defineProperty(exports, 'stream', {
 });
 
 /**
+ * Lazy require the `mongodb` transport.
+ */
+
+var mongodb;
+Object.defineProperty(exports, 'mongodb', {
+  get: function () {
+    return mongodb || (mongodb = require('./mongodb'))
+  }
+});
+
+/**
  * Lazy require the transport base.
  */
 
