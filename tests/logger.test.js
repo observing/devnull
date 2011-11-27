@@ -291,4 +291,88 @@ describe('dev/null, logger', function () {
       logger.has(fixture).should.equal(fixture)
     })
   })
+
+  describe('#remove', function () {
+    it('should call the .destroy method of the instance', function () {
+      var logger = new Logger
+        , asserts = 0
+        , example = function () {
+            this.destroy = function () {
+              ++asserts
+            }
+          }
+
+      logger.use(example)
+      logger.remove(example)
+
+      asserts.should.equal(1)
+    })
+
+    it('should remove the transport from the transports array', function () {
+      var logger = new Logger
+        , example = function () {
+            this.destroy = function () {
+            }
+          }
+
+      logger.use(example)
+      logger.transports.length.should.equal(1)
+
+      var rm = logger.remove(example)
+      logger.transports.length.should.equal(0)
+
+      rm.should.equal(logger)
+    })
+
+    it('should return a logger instance when nothing is found', function () {
+      var logger = new Logger
+
+      logger.remove().should.equal(logger)
+    })
+  })
+
+  describe('#stamp', function () {
+    it('should not generate a timestamp when disabled', function () {
+      var logger = new Logger({ timestamp: false })
+
+      logger.stamp().should.be.a('string')
+      logger.stamp().should.equal('')
+    })
+
+    it('should default to today when called without arguments', function () {
+      var logger = new Logger({ pattern: '{FullYear}{Date}'})
+        , today = new Date
+
+      logger.stamp().should.be.a('string')
+      logger.stamp().should.equal(today.getFullYear() + '' + today.getDate())
+    })
+
+    it('should also execute date methods instead of patterns', function () {
+      var logger = new Logger({ pattern: '{toLocaleDateString}' })
+        , now = new Date
+
+      logger.stamp(now).should.equal(now.toLocaleDateString())
+    })
+
+    it('should pad the values based on the pattern', function () {
+      var logger = new Logger({ pattern: '{Date:10}' })
+        , date = new Date(2011, 06, 05)
+
+      logger.stamp(date).should.equal('0000000005')
+    })
+
+    it('should increase month by 1', function () {
+      var logger = new Logger({ pattern: '{Month}' })
+        , date = new Date(2011, 6, 12)
+
+      logger.stamp(date).should.equal('7')
+    })
+
+    it('should just non template tags', function () {
+      var logger = new Logger({ pattern: 'hello <b>world</b> its {FullYear}'})
+        , date = new Date
+
+      logger.stamp(date).should.equal('hello <b>world</b> its ' + date.getFullYear())
+    })
+  })
 })
