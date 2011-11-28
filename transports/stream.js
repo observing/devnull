@@ -62,6 +62,12 @@ Streamer.prototype.write = function write (type, namespace, args) {
   return this;
 };
 
+/**
+ * Shutdown down the transport.
+ *
+ * @api private
+ */
+
 Streamer.prototype.close = function () {
   // don't close the stdout
   if (this.stream === process.stdout) return this;

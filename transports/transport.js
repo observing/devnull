@@ -22,12 +22,15 @@ function type (prop) {
  */
 
 var Transport = module.exports = function transport (logger, options) {
+  var self = this
+    , key;
+
   options = options || {};
   this.name = 'transport';
 
   // override the defaults, but not the methods and they should also be the
   // exact same type
-  for (var key in options) {
+  for (key in options) {
     if (key in this
       && type(this[key]) !== 'function'
       && type(this[key]) === type(options[key])
@@ -39,8 +42,11 @@ var Transport = module.exports = function transport (logger, options) {
   // should not be overridden by the options
   this.logger = logger;
 
+  // lazy initialize
   if (this.initialize) {
-    this.initialize.call(this, options);
+    process.nextTick(function next () {
+      self.initialize.call(self, options);
+    });
   }
 };
 
