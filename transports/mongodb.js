@@ -148,6 +148,8 @@ MongoDB.prototype.write = function write (type, namespace, args) {
     // attempt to add the log to the db
     this.insert(log, { safe: self.safe }, function (err) {
       if (err) return self.logger.emit('transport:error', err, log);
+
+      self.logger.emit('transport:write', log);
     })
   });
 };

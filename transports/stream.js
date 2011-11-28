@@ -46,17 +46,20 @@ require('util').inherits(Streamer, Transport);
  */
 
 Streamer.prototype.write = function write (type, namespace, args) {
-  if (this.stream.writable) {
-    this.stream.write(
-        this.logger.stamp()
+  var log = this.logger.stamp()
       + ' '
       + this.logger.prefix[type]
       + ' ('
       + namespace
       + ') '
       + this.logger.format.apply(this, args)
-      + '\n'
-    );
+      + '\n';
+
+  if (this.stream.writable) {
+    this.stream.write(log);
+    this.logger.emit('transport:write', log);
+  } else {
+    this.logger.emit('transport:error', new Error('stream not writable'), log);
   }
 
   return this;

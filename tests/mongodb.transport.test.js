@@ -71,4 +71,99 @@ describe('mongodb.transport', function () {
       })
     })
   })
+
+  describe('#write', function () {
+    it('should not emit failures when writing', function (next) {
+      var logger = new Logger({ base: false })
+
+      logger.use(MongoDB, { url: url })
+
+      logger.on('transport:error', function () {
+        logger.remove(MongoDB)
+
+        should.fail('should not have errors')
+        next()
+      })
+
+      logger.on('transport:failure', function () {
+        logger.remove(MongoDB)
+
+        should.fail('should not have fail')
+        next()
+      })
+
+      logger.on('transport:write', function () {
+        logger.remove(MongoDB)
+        next()
+      })
+
+      logger.log('hello world')
+    })
+
+    it('should send the correct data', function (next) {
+      var logger = new Logger({ base: false })
+
+      logger.use(MongoDB, { url: url })
+
+      logger.on('transport:error', function () {
+        logger.remove(MongoDB)
+
+        should.fail('should not have errors')
+        next()
+      })
+
+      logger.on('transport:failure', function () {
+        logger.remove(MongoDB)
+
+        should.fail('should not have fail')
+        next()
+      })
+
+      logger.on('transport:write', function (log) {
+        logger.remove(MongoDB)
+
+        log.type.should.equal('log')
+        should.exist(log.stamp) // hard to match against, so make sure it exists
+        log.namespace.should.be.a('string')
+        log.level.should.equal(Logger.levels[log.type])
+        Array.isArray(log.args).should.be.true
+
+        next()
+      })
+
+      logger.log('hello world')
+    })
+  })
+
+  describe('#close', function () {
+    it('should close and clean up the connection', function (next) {
+      var logger = new Logger({ base: false })
+
+      logger.use(MongoDB, { url: url })
+
+      logger.on('transport:error', function () {
+        logger.remove(MongoDB)
+
+        should.fail('should not have errors')
+        next()
+      })
+
+      logger.on('transport:failure', function () {
+        logger.remove(MongoDB)
+
+        should.fail('should not have fail')
+        next()
+      })
+
+      logger.on('transport:write', function () {
+        var instance = logger.transports[0]
+        logger.remove(MongoDB)
+
+        should.not.exist(instance.stream)
+        next()
+      })
+
+      logger.log('hello world')
+    })
+  })
 })
