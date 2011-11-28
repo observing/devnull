@@ -18,7 +18,9 @@ Transports = require('../transports/');
  * Fixtures
  */
 
-fixtures = {};
+fixtures = {
+    mongodb: 'mongodb://test:test@localhost:27017/myapp'
+};
 
 /**
  * Produce a dummy transport that emits events for each called method.

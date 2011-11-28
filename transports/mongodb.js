@@ -15,7 +15,7 @@ var MongoDB = module.exports = function mongo (logger, options) {
   this.save = false;
   this.reconnect = true;
   this.pool = 10;
-  this.url = '';
+  this.url = mongodb.Db.DEFAULT_URL;
 
   Transport.apply(this, arguments);
 
@@ -71,13 +71,15 @@ MongoDB.prototype.open = function open (err, connection) {
       self.stream = null;
       self.connecting = false;
     });
+  } else {
+    this.logger.emit('transport:failed', err);
   }
 
   // no longer connecting
   this.connecting = false;
 
   // start the whole collect thingy
-  queue.splice(0).forEach(function (request) {
+  this.queue.splice(0).forEach(function (request) {
     self.collect.call(self.stream
       , err
       , self.stream
@@ -157,5 +159,8 @@ MongoDB.prototype.write = function write (type, namespace, args) {
  */
 
 MongoDB.prototype.close = function () {
+  if (!this.stream) return this;
+
   this.stream.close();
+  this.stream = null;
 };
