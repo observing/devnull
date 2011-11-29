@@ -66,12 +66,12 @@ The following options are available for configuring your customized instance:
 
 Configure the module for different environments, it follows the same API as Express.js.
 
-## arguments
+#### arguments
 
 _env_ (string) environment
 _fn_ (function) callback
 
-## example
+#### example
 
 ```js
 var Logger = require('devnull')
@@ -92,18 +92,18 @@ logger.configure('development', function () {
 })
 ```
 
-#### #use(Transport, options)
+### #use(Transport, options)
 
 Adds another transport to the logger. We currently ship 2 different transports inside the module (stream and mongodb).
 
 These transports can be required using `require('devnull/transports/<transportname>')`.
 
-## arguments
+#### arguments
 
 _Transport_ (Transport) a uninitialized transport instance.
 _options_ (object) options for the transport.
 
-## example
+#### example
 
 ```js
 var Logger = require('devnull')
