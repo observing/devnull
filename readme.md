@@ -30,11 +30,11 @@ If you don't have NPM installed on your system you can get it at [http://npmjs.o
 
 ## API
 
-#### Initializing your logger
+### Initializing your logger
 
 You can either initialize the default logger:
 
-```
+```js
 var Logger = require('devnull')
   , logger = new Logger
 
@@ -45,7 +45,7 @@ logger.error('oh noes, something goes terribly wrong')
 
 Or configure a customized instance using the options argument:
 
-```
+```js
 var Logger = require('devnull')
   , logger = new Logger({ timestamp: false })
 
@@ -56,28 +56,24 @@ logger.log('hello world')
 The following options are available for configuring your customized instance:
 
 - **env** either development of production. Default is based on the isAtty check of the process.stdout.
-
 - **level** Only log statements that are less than this level will be logged. This allows you to filter out debug and log statements in production for example. Default is 8.
-
 - **notification** At what log level should we start emitting events? Default is 1.
-
 - **timestamp** Should we prepend a timestamp to the log message? Logging is always done asynchronously so it might be that log messages do not appear in order. A timestamp helps you identify the order of the logs. Default is true.
-
 - **pattern** The pattern for the timestamp. Everybody prefers it's own pattern. The pattern is based around the great [140bytes date entry](https://gist.github.com/1005948) but also allows functions to be called directly. Default is the util.log format that Node.js adopted.
-
 - **base** Should the logger be configured with the base transport (log to process.stdout)? Default is true.
 
-#### #configure(env, fn)
+### #configure(env, fn)
 
 Configure the module for different environments, it follows the same API as Express.js.
 
-**arguments**
+## arguments
+
 _env_ (string) environment
 _fn_ (function) callback
 
-**example**
+## example
 
-```
+```js
 var Logger = require('devnull')
   , logger = new Logger
 
@@ -99,3 +95,67 @@ logger.configure('development', function () {
 #### #use(Transport, options)
 
 Adds another transport to the logger. We currently ship 2 different transports inside the module (stream and mongodb).
+
+These transports can be required using `require('devnull/transports/<transportname>')`.
+
+## arguments
+
+_Transport_ (Transport) a uninitialized transport instance.
+_options_ (object) options for the transport.
+
+## example
+
+```js
+var Logger = require('devnull')
+  , logger = new Logger
+
+// use the stream transport to log to a node.js stream
+logger.use(require('devnull/transports/stream'), {
+  stream: require('fs').createWriteStream('logger.log')
+})
+
+// also exports all transports :)
+var transport = require('devnull/transports')
+
+// and add mongodb to production logging
+logger.configure('production', function () {
+  logger.use(transport.mongodb, {
+    url: 'mongodb://test:test@localhost:27017/myapp'
+  })
+})
+
+logger.warning('hello world')
+```
+
+### remove(Transport)
+
+Removes all transports of that instance.
+
+#### arguments
+
+_Transport_ (Transport) a transport
+
+#### example
+
+```js
+var Logger = require('devnull')
+  , logger = new Logger({ base: false })
+  , transports = require('devnull/transports')
+
+logger.use(transports.stream)
+logger.remove(transports.stream)
+```
+
+### Logging methods and levels
+
+The logger has the following methods available for logging. The (<number>) is the log level.
+
+- alert (0)
+- critical (1)
+- error (2)
+- warning (3)
+- metric (4)
+- notice (5)
+- info (6)
+- log (7)
+- debug (8)
