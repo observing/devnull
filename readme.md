@@ -62,16 +62,16 @@ The following options are available for configuring your customized instance:
 - **pattern** The pattern for the timestamp. Everybody prefers it's own pattern. The pattern is based around the great [140bytes date entry](https://gist.github.com/1005948) but also allows functions to be called directly. Default is the util.log format that Node.js adopted.
 - **base** Should the logger be configured with the base transport (log to process.stdout)? Default is true.
 
-### #configure(env, fn)
+### .configure(env, fn)
 
 Configure the module for different environments, it follows the same API as Express.js.
 
-#### arguments
+#### Arguments
 
 _env_ (string) environment
 _fn_ (function) callback
 
-#### example
+#### Example
 
 ```js
 var Logger = require('devnull')
@@ -92,18 +92,18 @@ logger.configure('development', function () {
 })
 ```
 
-### #use(Transport, options)
+### .use(Transport, options)
 
 Adds another transport to the logger. We currently ship 2 different transports inside the module (stream and mongodb).
 
 These transports can be required using `require('devnull/transports/<transportname>')`.
 
-#### arguments
+#### Arguments
 
 _Transport_ (Transport) a uninitialized transport instance.
 _options_ (object) options for the transport.
 
-#### example
+#### Example
 
 ```js
 var Logger = require('devnull')
@@ -127,15 +127,15 @@ logger.configure('production', function () {
 logger.warning('hello world')
 ```
 
-### remove(Transport)
+### .remove(Transport)
 
 Removes all transports of that instance.
 
-#### arguments
+#### Arguments
 
 _Transport_ (Transport) a transport
 
-#### example
+#### Example
 
 ```js
 var Logger = require('devnull')
