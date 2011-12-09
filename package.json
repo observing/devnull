@@ -1,6 +1,6 @@
 {
     "name": "devnull"
-  , "version": "0.0.3"
+  , "version": "0.0.4"
   , "description": "A simple logger with automatic function detection."
   , "homepage": "http://observer.no.de"
   , "keywords": ["log", "logger", "logging", "dev/null"]
@@ -15,7 +15,7 @@
     }
   , "devDependencies": {
         "mocha": "*"
-      , "should": "0.3.2"
+      , "should": "*"
       , "long-stack-traces": "0.1.2"
     }
   , "main": "index"
