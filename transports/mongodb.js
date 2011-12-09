@@ -7,7 +7,8 @@
  */
 
 var Transport = require('./transport')
-  , mongodb = require('mongodb');
+  , mongodb = require('mongodb')
+  , os = require('os');
 
 var MongoDB = module.exports = function mongo (logger, options) {
   // properties that could be overriden
@@ -16,6 +17,8 @@ var MongoDB = module.exports = function mongo (logger, options) {
   this.reconnect = true;
   this.pool = 10;
   this.url = mongodb.Db.DEFAULT_URL;
+  this.machine = os.hostname();
+  this.application = process.title || process.pid + ':pid';
 
   Transport.apply(this, arguments);
 
@@ -136,6 +139,8 @@ MongoDB.prototype.write = function write (type, namespace, args) {
   this.allocate(this.collection, function (err, db) {
     var log = {
         type: type
+      , machine: self.machine
+      , app: self.application
       , stamp: new Date
       , namespace: namespace
       , level: self.logger.levels[type]
