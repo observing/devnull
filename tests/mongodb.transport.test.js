@@ -124,7 +124,6 @@ describe('mongodb.transport', function () {
 
         log.type.should.equal('log')
         should.exist(log.stamp) // hard to match against, so make sure it exists
-        log.namespace.should.be.a('string')
         log.level.should.equal(Logger.levels[log.type])
         Array.isArray(log.args).should.be.true
 
