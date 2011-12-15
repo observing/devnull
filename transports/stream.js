@@ -71,7 +71,7 @@ Streamer.prototype.write = function write (type, namespace, args) {
  * @api private
  */
 
-Streamer.prototype.close = function () {
+Streamer.prototype.close = function close () {
   // don't close the stdout
   if (this.stream === process.stdout) return this;
 

@@ -82,7 +82,7 @@ MongoDB.prototype.open = function open (err, connection) {
   this.connecting = false;
 
   // start the whole collect thingy
-  this.queue.splice(0).forEach(function (request) {
+  this.queue.splice(0).forEach(function queue (request) {
     self.collect.call(self.stream
       , err
       , self.stream
@@ -136,22 +136,25 @@ MongoDB.prototype.allocate = function allocate (collection, fn) {
 MongoDB.prototype.write = function write (type, namespace, args) {
   var self = this;
 
-  this.allocate(this.collection, function (err, db) {
+  this.allocate(this.collection, function allocate (err, db) {
     var log = {
         type: type
       , machine: self.machine
       , app: self.application
       , stamp: new Date
-      , namespace: namespace
       , level: self.logger.levels[type]
       , args: args
     };
 
-    // unable to log
+    // optional logging
+    if (namespace) log.namespace = namespace;
+
+    // unable to log, so we emit the to-log object so the user can handle it off
+    // them selfs.
     if (err) return self.logger.emit('transport:error', err, log);
 
     // attempt to add the log to the db
-    this.insert(log, { safe: self.safe }, function (err) {
+    this.insert(log, { safe: self.safe }, function insert (err) {
       if (err) return self.logger.emit('transport:error', err, log);
 
       self.logger.emit('transport:write', log);
@@ -165,7 +168,7 @@ MongoDB.prototype.write = function write (type, namespace, args) {
  * @api private
  */
 
-MongoDB.prototype.close = function () {
+MongoDB.prototype.close = function close () {
   if (!this.stream) return this;
 
   this.stream.close();
