@@ -427,7 +427,7 @@ describe('dev/null, logger', function () {
     it('should emit events when the notification log level is used', function () {
       var stream = fixtures.stream()
         , logger = new Logger({ base:false })
-        , asserts = 0;
+        , asserts = 0
 
       logger.use(Transport.stream, { stream: stream.dummy })
 
@@ -444,7 +444,7 @@ describe('dev/null, logger', function () {
     it('should only emit logs <= notification level', function () {
       var stream = fixtures.stream()
         , logger = new Logger({ base:false })
-        , asserts = 0;
+        , asserts = 0
 
       logger.use(Transport.stream, { stream: stream.dummy })
 
@@ -473,7 +473,7 @@ describe('dev/null, logger', function () {
               base:false
             , notification: 1
           })
-        , asserts = 0;
+        , asserts = 0
 
       logger.use(Transport.stream, { stream: stream.dummy })
 
@@ -488,6 +488,28 @@ describe('dev/null, logger', function () {
       logger.warning('foo bar', 'ping ping')
       logger.critical('i should trigger the shizz')
       asserts.should.equal(1)
+    })
+
+    it('should be able to emit notifications without any transports', function () {
+      var logger = new Logger({
+              base: false
+            , notification: 10
+          })
+        , asserts = 0
+
+        logger.on('debug', function () {
+          ++asserts
+        })
+
+        logger.debug('pew')
+        asserts.should.equal(1)
+    })
+
+    it('should only emit when there are listeners applied', function () {
+      var logger = new Logger({ base:false })
+
+      logger.error('errors are usually thrown by the EventEmitter')
+      logger.error('if there are no error listeners so this should not throw')
     })
   })
 })
