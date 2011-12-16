@@ -62,6 +62,7 @@ The following options are available for configuring your customized instance:
 - **env** either development of production. Default is based on the isAtty check of the process.stdout.
 - **level** Only log statements that are less than this level will be logged. This allows you to filter out debug and log statements in production for example. Default is 8.
 - **notification** At what log level should we start emitting events? Default is 1.
+- **namespacing** At what log level should we start generating namespaces (uses callsite based stacktraces)? Defaults to 8.
 - **timestamp** Should we prepend a timestamp to the log message? Logging is always done asynchronously so it might be that log messages do not appear in order. A timestamp helps you identify the order of the logs. Default is true.
 - **pattern** The pattern for the timestamp. Everybody prefers it's own pattern. The pattern is based around the great [140bytes date entry](https://gist.github.com/1005948) but also allows functions to be called directly. Default is the util.log format that Node.js adopted.
 - **base** Should the logger be configured with the base transport (log to process.stdout)? Default is true.
