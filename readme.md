@@ -1,4 +1,4 @@
-# dev/null because logging should be really fast
+# dev/null because logging to dev/null is webscale
 
 Current build status: [![BuildStatus](https://secure.travis-ci.org/observing/devnull.png)](http://travis-ci.org/observing/devnull)
 
@@ -17,6 +17,10 @@ The logger is build on top of the EventEmitter prototype. This allows you to han
 ### Multiple transports
 
 It supports different logging transports. You might want to log to the terminal in production but to MongoDB in production so you have a centralized location of all your logs. Each logger can have multiple transports.
+
+![output preview](http://f.cl.ly/items/2t461h193a2D1t0f0k0q/Screen%20Shot%202011-12-15%20at%2022.29.14.PNG)
+
+The image above is the result of the [example/logging.js](https://github.com/observing/devnull/blob/master/example/logging.js)
 
 ## Installation
 
@@ -111,7 +115,7 @@ var Logger = require('devnull')
 
 // use the stream transport to log to a node.js stream
 logger.use(require('devnull/transports/stream'), {
-  stream: require('fs').createWriteStream('logger.log')
+    stream: require('fs').createWriteStream('logger.log')
 })
 
 // also exports all transports :)
@@ -120,7 +124,7 @@ var transport = require('devnull/transports')
 // and add mongodb to production logging
 logger.configure('production', function () {
   logger.use(transport.mongodb, {
-    url: 'mongodb://test:test@localhost:27017/myapp'
+      url: 'mongodb://test:test@localhost:27017/myapp'
   })
 })
 
@@ -144,6 +148,38 @@ var Logger = require('devnull')
 
 logger.use(transports.stream)
 logger.remove(transports.stream)
+```
+
+### .on(Event, fn)
+
+Because the Logger is build upon the EventEmitter you can also start listening for log messages. This is set to warning levels by default in the configuration options. In addition to listening to the log message you can also listen to the events of the transports. These are prefixed with `transport:`. The following events are emitted:
+
+- All the types (alert, critical etc)
+
+And the transport events:
+
+- `transport:failed(err)` transport failed to initialize
+- `transport:error(err, log)` transport failed to write the log due to an error
+- `transport:write(log)` transport written the log message
+
+#### Arguments
+
+_event_ (string) event to listen for
+_fn_ (function) callback, receives _args_ (array), _stack_ (stack/callsite)
+
+#### Example
+
+```
+var Logger = require('devnull')
+  , logger = new Logger
+  
+logger.on('error', function (args, stack) {
+ // args = foo bar, 1
+ // stack = stack trace that we used to generate the namespace
+ email('errors@pew.pew', 'error!', args);
+})
+
+logger.error('foo bar', 1)
 ```
 
 ### Logging methods and levels
