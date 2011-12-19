@@ -50,7 +50,7 @@ Streamer.prototype.write = function write (type, namespace, args) {
       + ' '
       + this.logger.prefix[type]
       + ' ('
-      + namespace
+      + (namespace ? namespace.join('/') : '/')
       + ') '
       + this.logger.format.apply(this, args)
       + '\n';
