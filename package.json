@@ -11,11 +11,11 @@
       }
   , "dependencies": {
         "colors": "0.5.1"
-      , "mongodb": ""
+      , "mongodb": "0.9.7-2-3"
     }
   , "devDependencies": {
         "mocha": "*"
-      , "should": "*"
+      , "should": "0.3.2"
       , "long-stack-traces": "0.1.2"
     }
   , "main": "index"
