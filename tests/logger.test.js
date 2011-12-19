@@ -3,6 +3,7 @@
  * @copyright (c) 2011 Observe.it (observe.it) <arnout@observe.com>
  * MIT Licensed
  */
+var should = require('should')
 
 describe('dev/null, logger', function () {
   it('should expose the current version number', function () {
@@ -510,6 +511,78 @@ describe('dev/null, logger', function () {
 
       logger.error('errors are usually thrown by the EventEmitter')
       logger.error('if there are no error listeners so this should not throw')
+    })
+  })
+
+  describe('#get', function () {
+    it('should return the value for the given key', function () {
+      var logger = new Logger
+
+      logger.get('env').should.equal(logger.env)
+      logger.get('pattern').should.equal(logger.pattern)
+    })
+
+    it('should return nothing for unknown keys', function () {
+      var logger = new Logger
+
+      should.not.exist(logger.get('trolololol'))
+    })
+  })
+
+  describe('#set', function () {
+    it('should set values', function () {
+      var logger = new Logger
+
+      logger.set('env', 'testing')
+      logger.get('env').should.equal('testing')
+    })
+
+    it('should only set values for existing keys', function () {
+      var logger = new Logger
+
+      logger.set('aaaaa', 12)
+      should.not.exist(logger.get('aaaaa'))
+    })
+
+    it('should emit an event when a new value is set', function (next) {
+      var logger = new Logger
+
+      logger.on('settings:env', function (value) {
+        value.should.equal('testing')
+        next()
+      })
+
+      logger.set('env', 'testing')
+    })
+
+    it('should not emit an event when the value stays the same', function (next) {
+      var logger = new Logger
+
+      logger.on('settings:env', function (value) {
+        should.fail()
+      })
+
+      logger.set('env', logger.get('env'))
+      setTimeout(next, 10)
+    })
+  })
+
+  describe('#enabled', function () {
+    it('should be enabled', function () {
+      var logger = new Logger
+
+      logger.enabled('base').should.be.true
+      logger.enabled('timestamp').should.be.true
+    })
+
+    it('should not be enabled', function () {
+      var logger = new Logger
+
+      logger.set('timestamp', false)
+      logger.set('base', false)
+
+      logger.enabled('base').should.be.false
+      logger.enabled('timestamp').should.be.false
     })
   })
 })

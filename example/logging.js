@@ -1,6 +1,10 @@
 var Logger = require('../')
   , logger = new Logger;
 
+logger.configure(function () {
+  this.ignore('logging.js')
+})
+
 function namespacing () {
   logger.debug('debug message');
   logger.log('logging an array', []);
@@ -25,5 +29,9 @@ logger.log('userdefinednamespace', 'one word without spaces is a user namespace'
 
 // listen for emitted errors
 logger.on('error', function (args, stack) {
-  console.log('There was an error logged at line: ' + stack[0].getLineNumber());
+  console.log('There was an error logged at line: ' + (stack
+    ? stack[0].getLineNumber()
+    : 'unknown'
+  ));
 });
+
