@@ -1,6 +1,6 @@
 {
     "name": "devnull"
-  , "version": "0.0.5"
+  , "version": "0.0.6"
   , "description": "A simple logger with automatic function detection."
   , "homepage": "http://observer.no.de"
   , "keywords": ["log", "logger", "logging", "dev/null"]
