@@ -27,7 +27,7 @@ var MongoDB = module.exports = function mongo (logger, options) {
   this.queue = [];
   this.connecting = false;
   this.stream = null;
-}
+};
 
 /**
  * Inherit from `Transport`.
@@ -90,7 +90,7 @@ MongoDB.prototype.open = function open (err, connection) {
       , request.fn
     );
   });
-}
+};
 
 /**
  * Fetches a working connection.
@@ -158,7 +158,7 @@ MongoDB.prototype.write = function write (type, namespace, args) {
       if (err) return self.logger.emit('transport:error', err, log);
 
       self.logger.emit('transport:write', log);
-    })
+    });
   });
 };
 

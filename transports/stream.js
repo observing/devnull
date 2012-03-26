@@ -29,7 +29,7 @@ var Streamer = module.exports = function streamer (logger, options) {
 
   // set the correct name
   this.name = 'streamer';
-}
+};
 
 /**
  * Inherit from `Transport`.
@@ -76,7 +76,7 @@ Streamer.prototype.close = function close () {
   if (this.stream === process.stdout) return this;
 
   if (this.stream.end) {
-    try { this.stream.end() }
+    try { this.stream.end(); }
     catch (e) {}
   }
 };

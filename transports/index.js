@@ -11,7 +11,7 @@
 var stream;
 Object.defineProperty(exports, 'stream', {
   get: function () {
-    return stream || (stream = require('./stream'))
+    return stream || (stream = require('./stream'));
   }
 });
 
@@ -22,7 +22,7 @@ Object.defineProperty(exports, 'stream', {
 var mongodb;
 Object.defineProperty(exports, 'mongodb', {
   get: function () {
-    return mongodb || (mongodb = require('./mongodb'))
+    return mongodb || (mongodb = require('./mongodb'));
   }
 });
 
@@ -33,6 +33,6 @@ Object.defineProperty(exports, 'mongodb', {
 var transport;
 Object.defineProperty(exports, 'transport', {
   get: function () {
-    return transport || (transport = require('./transport'))
+    return transport || (transport = require('./transport'));
   }
 });

@@ -1,16 +1,14 @@
+"use strict";
+
 var Logger = require('../')
   , logger = new Logger;
-
-logger.configure(function () {
-  this.ignore('logging.js')
-})
 
 function namespacing () {
   logger.debug('debug message');
   logger.log('logging an array', []);
   logger.info('info message with object', {});
-  logger.notice('sending a notice', 1, 2, 3)
-  logger.metric('already send', logger.calls, 'logs')
+  logger.notice('sending a notice', 1, 2, 3);
+  logger.metric('already send', logger.calls, 'logs');
   logger.warning('odear, we are going to break something');
   logger.error('something bad happend');
   logger.critical('oh FUCK the system is melting down');

@@ -1,3 +1,5 @@
+"use strict";
+
 var EventEmitter = process.EventEmitter;
 
 /**
@@ -10,7 +12,7 @@ var EventEmitter = process.EventEmitter;
 
 function type (prop) {
   var rs = Object.prototype.toString.call(prop);
-  return rs.slice(8, rs.length - 1).toLowerCase()
+  return rs.slice(8, rs.length - 1).toLowerCase();
 }
 
 /**
@@ -70,4 +72,4 @@ Transport.prototype.write = function write (type, namespace, args) {};
  * @api public
  */
 
-Transport.prototype.close = function close () {}
+Transport.prototype.close = function close () {};
