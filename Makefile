@@ -5,7 +5,7 @@ UI = bdd
 test:
 	@./node_modules/.bin/mocha \
 		--require should \
-		--require $(shell pwd)/tests/common \
+		--require tests/common \
 		--reporter $(REPORTER) \
 		--ui $(UI) \
 		--growl \
