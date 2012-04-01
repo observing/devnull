@@ -183,6 +183,42 @@ logger.on('error', function (args, stack) {
 logger.error('foo bar', 1)
 ```
 
+### .ignore(file)
+
+Ignore the output of a given file name, so everything that is logged in that
+file is ignored.
+
+#### Arguments
+
+_env_ (string) file
+
+#### Example
+
+```js
+var Logger = require('devnull')
+  , logger = new Logger
+
+logger.ignore('my_other_module.js');
+```
+
+### .unignore(file)
+
+Unignore the file that you ignored above
+
+#### Arguments
+
+_env_ (string) file
+
+#### Example
+
+```js
+var Logger = require('devnull')
+  , logger = new Logger
+
+logger.ignore('my_other_module.js');
+logger.unignore('my_other_module.js');
+```
+
 ### Logging methods and levels
 
 The logger has the following methods available for logging. The (<number>) is the log level.
