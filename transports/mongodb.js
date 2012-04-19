@@ -147,7 +147,7 @@ MongoDB.prototype.write = function write (type, namespace, args) {
     };
 
     // optional logging
-    if (namespace) log.namespace = namespace;
+    if (namespace && namespace.length) log.namespace = namespace;
 
     // unable to log, so we emit the to-log object so the user can handle it off
     // them selfs.
