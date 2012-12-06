@@ -1,5 +1,10 @@
-"use strict";
+'use strict';
 
+/**!
+ * dev/null
+ * @copyright (c) 2012 observe.it (observe.it) <arnout@observe.com>
+ * mit licensed
+ */
 var EventEmitter = process.EventEmitter;
 
 /**
@@ -9,8 +14,7 @@ var EventEmitter = process.EventEmitter;
  * @returns {String}
  * @api private
  */
-
-function type (prop) {
+function type(prop) {
   var rs = Object.prototype.toString.call(prop);
   return rs.slice(8, rs.length - 1).toLowerCase();
 }
@@ -19,11 +23,11 @@ function type (prop) {
  * The base setup.
  *
  * @constructor
+ * @param {Logger} logger
  * @param {Object} options
  * @api private
  */
-
-var Transport = module.exports = function transport (logger, options) {
+var Transport = module.exports = function transport(logger, options) {
   var self = this
     , key;
 
@@ -46,7 +50,7 @@ var Transport = module.exports = function transport (logger, options) {
 
   // lazy initialize
   if (this.initialize) {
-    process.nextTick(function next () {
+    process.nextTick(function next() {
       self.initialize.call(self, options);
     });
   }
@@ -63,13 +67,11 @@ Transport.prototype.__proto__ = EventEmitter.prototype;
  * @param {Array} args arguments
  * @api public
  */
-
-Transport.prototype.write = function write (type, namespace, args) {};
+Transport.prototype.write = function write(type, namespace, args) {};
 
 /**
  * The transport needs to be removed
  *
  * @api public
  */
-
-Transport.prototype.close = function close () {};
+Transport.prototype.close = function close() {};

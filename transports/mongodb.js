@@ -1,16 +1,22 @@
-"use strict";
+'use strict';
 
 /**!
  * dev/null
- * @copyright (c) 2011 observe.it (observe.it) <arnout@observe.com>
+ * @copyright (c) 2012 observe.it (observe.it) <arnout@observe.com>
  * mit licensed
  */
-
 var Transport = require('./transport')
   , mongodb = require('mongodb')
   , os = require('os');
 
-var MongoDB = module.exports = function mongo (logger, options) {
+/**
+ * The MongoDB transport.
+ *
+ * @constructor
+ * @param {Logger} logger logger base instance
+ * @param {Object} options configurations
+ */
+var MongoDB = module.exports = function mongo(logger, options) {
   // properties that could be overriden
   this.collection = 'log';
   this.save = false;
@@ -32,7 +38,6 @@ var MongoDB = module.exports = function mongo (logger, options) {
 /**
  * Inherit from `Transport`.
  */
-
 require('util').inherits(MongoDB, Transport);
 
 /**
@@ -44,11 +49,10 @@ require('util').inherits(MongoDB, Transport);
  * @param {Function} fn callback
  * @api private
  */
-
 MongoDB.prototype.collect = function collect(err, db, collection, fn) {
   if (err) return fn.call(db, err, null);
 
-  db.collection(collection, function collection (err, col) {
+  db.collection(collection, function collection(err, col) {
     fn.call(col, err, db);
   });
 };
@@ -60,8 +64,7 @@ MongoDB.prototype.collect = function collect(err, db, collection, fn) {
  * @param {MongoDB} mongo Mongodb connection stream
  * @api private
  */
-
-MongoDB.prototype.open = function open (err, connection) {
+MongoDB.prototype.open = function open(err, connection) {
   var self = this;
 
   if (!err) {
@@ -69,7 +72,7 @@ MongoDB.prototype.open = function open (err, connection) {
 
     // handle uncaught errors, close the connection so we can automatically
     // setup a new one again
-    connection.on('error', function uncaughtError (err) {
+    connection.on('error', function uncaughtError(err) {
       self.stream.close();
       self.stream = null;
       self.connecting = false;
@@ -82,7 +85,7 @@ MongoDB.prototype.open = function open (err, connection) {
   this.connecting = false;
 
   // start the whole collect thingy
-  this.queue.splice(0).forEach(function queue (request) {
+  this.queue.splice(0).forEach(function queue(request) {
     self.collect.call(self.stream
       , err
       , self.stream
@@ -99,11 +102,11 @@ MongoDB.prototype.open = function open (err, connection) {
  * @param {Function} fn callback
  * @api private
  */
-
-MongoDB.prototype.allocate = function allocate (collection, fn) {
+MongoDB.prototype.allocate = function allocate(collection, fn) {
   // fast case
-  if (this.stream)
+  if (this.stream) {
     return this.collect.call(this.stream, null, this.stream, collection, fn);
+  }
 
   // no stream so we will queue up requests if needed
   var request = {
@@ -132,11 +135,10 @@ MongoDB.prototype.allocate = function allocate (collection, fn) {
  * @param {String} namespace
  * @api public
  */
-
-MongoDB.prototype.write = function write (type, namespace, args) {
+MongoDB.prototype.write = function write(type, namespace, args) {
   var self = this;
 
-  this.allocate(this.collection, function allocate (err, db) {
+  this.allocate(this.collection, function allocate(err, db) {
     var log = {
         type: type
       , machine: self.machine
@@ -154,7 +156,7 @@ MongoDB.prototype.write = function write (type, namespace, args) {
     if (err) return self.logger.emit('transport:error', err, log);
 
     // attempt to add the log to the db
-    this.insert(log, { safe: self.safe }, function insert (err) {
+    this.insert(log, { safe: self.safe }, function insert(err) {
       if (err) return self.logger.emit('transport:error', err, log);
 
       self.logger.emit('transport:write', log);
@@ -167,8 +169,7 @@ MongoDB.prototype.write = function write (type, namespace, args) {
  *
  * @api private
  */
-
-MongoDB.prototype.close = function close () {
+MongoDB.prototype.close = function close() {
   if (!this.stream) return this;
 
   this.stream.close();

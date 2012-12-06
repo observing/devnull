@@ -1,11 +1,10 @@
-"use strict";
+'use strict';
 
 /**!
  * dev/null
- * @copyright (c) 2011 observe.it (observe.it) <arnout@observe.com>
+ * @copyright (c) 2012 observe.it (observe.it) <arnout@observe.com>
  * mit licensed
  */
-
 var Transport = require('./transport');
 
 /**
@@ -16,12 +15,11 @@ var Transport = require('./transport');
  *
  * - `stream` A node.js compatible stream, defaults to process.stdout
  *
- * @param {Stream} stream
+ * @param {Logger} logger
  * @param {Object} options
  * @api public
  */
-
-var Streamer = module.exports = function streamer (logger, options) {
+var Streamer = module.exports = function streamer(logger, options) {
   // properties that could be overriden
   this.stream = process.stdout;
 
@@ -34,7 +32,6 @@ var Streamer = module.exports = function streamer (logger, options) {
 /**
  * Inherit from `Transport`.
  */
-
 require('util').inherits(Streamer, Transport);
 
 /**
@@ -42,10 +39,10 @@ require('util').inherits(Streamer, Transport);
  *
  * @param {String} type
  * @param {String} namespace
+ * @param {Array} args arguments
  * @api public
  */
-
-Streamer.prototype.write = function write (type, namespace, args) {
+Streamer.prototype.write = function write(type, namespace, args) {
   var log = this.logger.stamp()
       + ' '
       + this.logger.prefix[type]
@@ -68,8 +65,7 @@ Streamer.prototype.write = function write (type, namespace, args) {
  *
  * @api private
  */
-
-Streamer.prototype.close = function close () {
+Streamer.prototype.close = function close() {
   // don't close the stdout
   if (this.stream === process.stdout) return this;
 
