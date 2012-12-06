@@ -13,7 +13,7 @@
   var cached;
 
   Object.defineProperty(exports, transport, {
-    get: function get {
+    get: function get() {
       return cached || (cached = require('./'+ transport));
     }
   });
