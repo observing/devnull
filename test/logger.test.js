@@ -1,50 +1,46 @@
-/*globals it:true, describe:true, Transport:true, fixtures:true, Logger:true */
+/*globals it:true, describe:true, Transport:true, fixtures:true, Logger:true, expect:true */
+
 /**!
  * dev/null
- * @copyright (c) 2011 Observe.it (observe.it) <arnout@observe.com>
+ * @copyright (c) 2012 Observe.it (observe.it) <arnout@observe.com>
  * MIT Licensed
  */
-
-var should = require('should');
-
 describe('dev/null, logger', function () {
-  "use strict";
+  'use strict';
 
   it('should expose the current version number', function () {
-    Logger.version.should.be.a('string');
-    Logger.version.should.match(/[0-9]+\.[0-9]+\.[0-9]+/);
+    expect(Logger.version).to.be.a('string');
+    expect(Logger.version).to.match(/[0-9]+\.[0-9]+\.[0-9]+/);
   });
 
   it('should expose the logging methods', function () {
-    Logger.methods.should.be.a('object');
-    Logger.methods.development.should.be.a('object');
-    Logger.methods.production.should.be.a('object');
+    expect(Logger.methods).to.be.a('object');
+    expect(Logger.methods.development).to.be.a('object');
+    expect(Logger.methods.production).to.be.a('object');
 
     var production = Object.keys(Logger.methods.production)
       , development = Object.keys(Logger.methods.development);
 
-    production.length.should.be.above(0);
-    development.length.should.be.above(0);
+    expect(production.length).to.be.above(0);
+    expect(development.length).to.be.above(0);
 
-    production.length.should.equal(development.length);
+    expect(production.length).to.equal(development.length);
 
     production.forEach(function (key) {
-      development.indexOf(key).should.be.above(-1);
-
-      Logger.methods.production[key].should.be.a('string');
-      Logger.methods.development[key].should.be.a('string');
+      expect(development.indexOf(key)).to.be.above(-1);
+      expect(Logger.methods.production[key]).to.be.a('string');
+      expect(Logger.methods.development[key]).to.be.a('string');
     });
   });
 
   it('should expose the logging levels', function () {
-    Logger.levels.should.be.a('object');
+    expect(Logger.levels).to.be.a('object');
 
     var levels = Object.keys(Logger.levels);
-
-    levels.length.should.be.above(0);
+    expect(levels.length).to.be.above(0);
 
     levels.forEach(function (key) {
-      Logger.levels[key].should.be.a('number');
+      expect(Logger.levels[key]).to.be.a('number');
     });
   });
 
@@ -52,10 +48,10 @@ describe('dev/null, logger', function () {
     var levels = Object.keys(Logger.levels)
       , production = Object.keys(Logger.methods.production);
 
-    levels.length.should.equal(production.length);
+    expect(levels.length).to.equal(production.length);
 
     levels.forEach(function (key) {
-      production.indexOf(key).should.be.above(-1);
+      expect(production.indexOf(key)).to.be.above(-1);
     });
   });
 
@@ -67,33 +63,33 @@ describe('dev/null, logger', function () {
     it('should have defaults', function () {
       var logger = new Logger;
 
-      logger.should.respondTo('configure');
-      logger.should.respondTo('use');
-      logger.should.respondTo('has');
-      logger.should.respondTo('remove');
-      logger.should.respondTo('write');
+      expect(logger).to.respondTo('configure');
+      expect(logger).to.respondTo('use');
+      expect(logger).to.respondTo('has');
+      expect(logger).to.respondTo('remove');
+      expect(logger).to.respondTo('write');
 
-      logger.env.should.be.a('string');
-      logger.level.should.be.a('number');
-      logger.notification.should.be.a('number');
-      logger.timestamp.should.be.a('boolean');
-      logger.pattern.should.be.a('string');
+      expect(logger.env).to.be.a('string');
+      expect(logger.level).to.be.a('number');
+      expect(logger.notification).to.be.a('number');
+      expect(logger.timestamp).to.be.a('boolean');
+      expect(logger.pattern).to.be.a('string');
     });
 
     it('should not throw when constructed with an empty object', function () {
       var logger = new Logger({});
 
-      logger.should.respondTo('configure');
-      logger.should.respondTo('use');
-      logger.should.respondTo('has');
-      logger.should.respondTo('remove');
-      logger.should.respondTo('write');
+      expect(logger).to.respondTo('configure');
+      expect(logger).to.respondTo('use');
+      expect(logger).to.respondTo('has');
+      expect(logger).to.respondTo('remove');
+      expect(logger).to.respondTo('write');
 
-      logger.env.should.be.a('string');
-      logger.level.should.be.a('number');
-      logger.notification.should.be.a('number');
-      logger.timestamp.should.be.a('boolean');
-      logger.pattern.should.be.a('string');
+      expect(logger.env).to.be.a('string');
+      expect(logger.level).to.be.a('number');
+      expect(logger.notification).to.be.a('number');
+      expect(logger.timestamp).to.be.a('boolean');
+      expect(logger.pattern).to.be.a('string');
     });
 
     it('should override the defaults with a config object', function () {
@@ -103,15 +99,15 @@ describe('dev/null, logger', function () {
         , pattern: 'pew pew'
       });
 
-      logger.level.should.equal(1);
-      logger.notification.should.equal(0);
-      logger.pattern.should.equal('pew pew');
+      expect(logger.level).to.equal(1);
+      expect(logger.notification).to.equal(0);
+      expect(logger.pattern).to.equal('pew pew');
     });
 
     it('should not override the methods with a config object', function () {
       var logger = new Logger({ use: 'pewpew' });
 
-      logger.should.respondTo('use');
+      expect(logger).to.respondTo('use');
     });
 
     it('should not introduce new properties with a config object', function () {
@@ -121,10 +117,9 @@ describe('dev/null, logger', function () {
         , pattern: 'pew pew'
       });
 
-      logger.level.should.equal(0);
-      logger.pattern.should.equal('pew pew');
-
-      require('should').not.exist(logger.introduced);
+      expect(logger.level).to.equal(0);
+      expect(logger.pattern).to.equal('pew pew');
+      expect(logger).to.not.have.property('introduced');
     });
 
     it('should have the same log methods as levels', function () {
@@ -133,11 +128,11 @@ describe('dev/null, logger', function () {
         , asserts = 0;
 
       levels.forEach(function (key) {
-        logger.should.respondTo(key);
+        expect(logger).to.respondTo(key);
         ++asserts;
       });
 
-      asserts.should.be.above(2);
+      expect(asserts).to.be.above(2);
     });
   });
 
@@ -146,51 +141,51 @@ describe('dev/null, logger', function () {
       var logger = new Logger
         , asserts = 0;
 
-      logger.configure.should.be.a('function');
+      expect(logger.configure).to.be.a('function');
       logger.configure(function () {
         ++asserts;
-        this.should.equal(logger);
+        expect(this).to.equal(logger);
       });
 
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should trigger callback for all environments and production', function () {
       var logger = new Logger
         , asserts = 0;
 
-      logger.env.should.be.a('string');
+      expect(logger.env).to.be.a('string');
       logger.env = 'production';
 
       logger.configure(function () {
         ++asserts;
-        this.should.equal(logger);
+        expect(this).to.equal(logger);
       });
 
       logger.configure('production', function () {
         ++asserts;
-        this.should.equal(logger);
+        expect(this).to.equal(logger);
       });
 
       logger.configure('invalid', function () {
-        should.fail('should not run');
+        throw new Error('I should not be called');
       });
 
-      asserts.should.equal(2);
+      expect(asserts).to.equal(2);
     });
 
     it('should return a logger instance with no arguments are passed', function () {
       var logger = new Logger
         , configure = logger.configure();
 
-      configure.should.equal(logger);
+      expect(configure).to.equal(logger);
     });
 
     it('should return a logger instance', function (){
       var logger = new Logger
         , configure = logger.configure(function () {});
 
-      configure.should.equal(logger);
+      expect(configure).to.equal(logger);
     });
   });
 
@@ -205,8 +200,7 @@ describe('dev/null, logger', function () {
       });
 
       logger.use(transport.dummy);
-
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should executed function should receive arguments', function () {
@@ -217,13 +211,12 @@ describe('dev/null, logger', function () {
       transport.on('initialize', function (self, options) {
         ++asserts;
 
-        self.should.equal(logger);
-        options.foo.should.equal('bar');
+        expect(self).to.equal(logger);
+        expect(options.foo).to.equal('bar');
       });
 
       logger.use(transport.dummy, { foo:'bar' });
-
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should add the transport to the transports array', function () {
@@ -235,11 +228,10 @@ describe('dev/null, logger', function () {
         ++asserts;
       });
 
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
       logger.use(transport.dummy);
-      logger.transports.length.should.equal(1);
-
-      asserts.should.equal(1);
+      expect(logger.transports.length).to.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should create a new instance of the function', function () {
@@ -252,40 +244,39 @@ describe('dev/null, logger', function () {
       });
 
       logger.use(transport.dummy);
-      logger.transports[0].should.be.an.instanceof(transport.dummy);
-
-      asserts.should.equal(1);
+      expect(logger.transports[0]).to.be.an.instanceof(transport.dummy);
+      expect(asserts).to.equal(1);
     });
 
     it('should only add functions', function () {
       var logger = new Logger({ base:false });
 
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
       logger.use('string');
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
       logger.use({});
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
       logger.use([]);
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
       logger.use(1337);
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
       logger.use(new Date);
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
       logger.use(/regexp/);
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
     });
 
     it('should return a logger instance', function () {
       var logger = new Logger({ base:false })
         , use = logger.use(function () {});
 
-      use.should.equal(logger);
+      expect(use).to.equal(logger);
     });
   });
 
@@ -293,14 +284,14 @@ describe('dev/null, logger', function () {
     it('should return a boolean for failures', function () {
       var logger = new Logger({ base:false });
 
-      logger.has('a').should.be.a('boolean');
-      logger.has('b').should.eql(false);
+      expect(logger.has('a')).to.be.a('boolean');
+      expect(logger.has('b')).to.eql(false);
     });
 
     it('should not throw without when called without arguments', function () {
       var logger = new Logger({ base:false });
 
-      logger.has().should.be.a('boolean');
+      expect(logger.has()).to.be.a('boolean');
     });
 
     it('should return the found instance', function () {
@@ -308,7 +299,7 @@ describe('dev/null, logger', function () {
         , transport = fixtures.transport();
 
       logger.use(transport.dummy);
-      logger.has(transport.dummy).should.be.an.instanceof(transport.dummy);
+      expect(logger.has(transport.dummy)).to.be.an.instanceof(transport.dummy);
     });
 
     it('should return the found match, if it equals the argument', function () {
@@ -319,7 +310,7 @@ describe('dev/null, logger', function () {
       }
 
       logger.transports.push(new Dummy);
-      logger.has(Dummy).should.not.equal(false);
+      expect(logger.has(Dummy)).to.not.equal(false);
     });
   });
 
@@ -336,7 +327,7 @@ describe('dev/null, logger', function () {
       logger.use(transport.dummy);
       logger.remove(transport.dummy);
 
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should remove the transport from the transports array', function () {
@@ -349,19 +340,19 @@ describe('dev/null, logger', function () {
       });
 
       logger.use(transport.dummy);
-      logger.transports.length.should.equal(1);
+      expect(logger.transports.length).to.equal(1);
 
       var rm = logger.remove(transport.dummy);
-      logger.transports.length.should.equal(0);
+      expect(logger.transports.length).to.equal(0);
 
-      rm.should.equal(logger);
-      asserts.should.equal(1);
+      expect(rm).to.equal(logger);
+      expect(asserts).to.equal(1);
     });
 
     it('should return a logger instance when nothing is found', function () {
       var logger = new Logger({ base:false });
 
-      logger.remove().should.equal(logger);
+      expect(logger.remove()).to.equal(logger);
     });
 
     it('should only remove the given logger instance', function () {
@@ -369,14 +360,14 @@ describe('dev/null, logger', function () {
         , transport = fixtures.transport()
         , base = require('../transports/stream');
 
-      logger.transports.length.should.equal(1);
+      expect(logger.transports.length).to.equal(1);
 
       logger.use(transport.dummy);
-      logger.transports.length.should.equal(2);
+      expect(logger.transports.length).to.equal(2);
 
       logger.remove(transport.dummy);
-      logger.transports.length.should.equal(1);
-      logger.transports.pop().should.be.an.instanceof(base);
+      expect(logger.transports.length).to.equal(1);
+      expect(logger.transports.pop()).to.be.an.instanceof(base);
     });
   });
 
@@ -384,44 +375,44 @@ describe('dev/null, logger', function () {
     it('should not generate a timestamp when disabled', function () {
       var logger = new Logger({ timestamp: false });
 
-      logger.stamp().should.be.a('string');
-      logger.stamp().should.equal('');
+      expect(logger.stamp()).to.be.a('string');
+      expect(logger.stamp()).to.equal('');
     });
 
     it('should default to today when called without arguments', function () {
       var logger = new Logger({ pattern: '{FullYear}{Date}'})
         , today = new Date;
 
-      logger.stamp().should.be.a('string');
-      logger.stamp().should.equal(today.getFullYear() + '' + today.getDate());
+      expect(logger.stamp()).to.be.a('string');
+      expect(logger.stamp()).to.equal(today.getFullYear() + '' + today.getDate());
     });
 
     it('should also execute date methods instead of patterns', function () {
       var logger = new Logger({ pattern: '{toLocaleDateString}' })
         , now = new Date;
 
-      logger.stamp(now).should.equal(now.toLocaleDateString());
+      expect(logger.stamp(now)).to.equal(now.toLocaleDateString());
     });
 
     it('should pad the values based on the pattern', function () {
       var logger = new Logger({ pattern: '{Date:10}' })
         , date = new Date(2011, 6, 5);
 
-      logger.stamp(date).should.equal('0000000005');
+      expect(logger.stamp(date)).to.equal('0000000005');
     });
 
     it('should increase month by 1', function () {
       var logger = new Logger({ pattern: '{Month}' })
         , date = new Date(2011, 6, 12);
 
-      logger.stamp(date).should.equal('7');
+      expect(logger.stamp(date)).to.equal('7');
     });
 
     it('should just non template tags', function () {
       var logger = new Logger({ pattern: 'hello <b>world</b> its {FullYear}'})
         , date = new Date;
 
-      logger.stamp(date).should.equal('hello <b>world</b> its ' + date.getFullYear());
+      expect(logger.stamp(date)).to.equal('hello <b>world</b> its ' + date.getFullYear());
     });
   });
 
@@ -429,7 +420,7 @@ describe('dev/null, logger', function () {
     it('should default to warnings', function () {
       var logger = new Logger;
 
-      logger.notification.should.equal(Logger.levels.warning);
+      expect(logger.notification).to.equal(Logger.levels.warning);
     });
 
     it('should emit events when the notification log level is used', function () {
@@ -440,13 +431,14 @@ describe('dev/null, logger', function () {
       logger.use(Transport.stream, { stream: stream.dummy });
 
       logger.on('warning', function (args, stack) {
-        args[0].should.equal('foo bar');
-        args[1].should.equal('ping ping');
+        expect(args[0]).to.equal('foo bar');
+        expect(args[1]).to.equal('ping ping');
+
         ++asserts;
       });
 
       logger.warning('foo bar', 'ping ping');
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should only emit logs <= notification level', function () {
@@ -465,14 +457,14 @@ describe('dev/null, logger', function () {
       });
 
       logger.on('metric', function () {
-        should.fail('should not run');
+        throw new Error('Should fail hard, dont run this shit yo');
       });
 
       logger.warning('is eaual to the notification level');
       logger.metric('is higher then the notification level');
       logger.error('is lower then the notification level');
 
-      asserts.should.equal(2);
+      expect(asserts).to.equal(2);
     });
 
     it('the level should configurable', function () {
@@ -490,12 +482,12 @@ describe('dev/null, logger', function () {
       });
 
       logger.on('warning', function (args, stack) {
-        should.fail('should not run');
+        throw new Error('I should not run');
       });
 
       logger.warning('foo bar', 'ping ping');
       logger.critical('i should trigger the shizz');
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should be able to emit notifications without any transports', function () {
@@ -510,7 +502,7 @@ describe('dev/null, logger', function () {
         });
 
         logger.debug('pew');
-        asserts.should.equal(1);
+        expect(asserts).to.equal(1);
     });
 
     it('should only emit when there are listeners applied', function () {
@@ -525,14 +517,14 @@ describe('dev/null, logger', function () {
     it('should return the value for the given key', function () {
       var logger = new Logger;
 
-      logger.get('env').should.equal(logger.env);
-      logger.get('pattern').should.equal(logger.pattern);
+      expect(logger.get('env')).to.equal(logger.env);
+      expect(logger.get('pattern')).to.equal(logger.pattern);
     });
 
     it('should return nothing for unknown keys', function () {
       var logger = new Logger;
 
-      should.not.exist(logger.get('trolololol'));
+      expect(logger.get('trolololol')).to.be.a('undefined');
     });
   });
 
@@ -541,21 +533,21 @@ describe('dev/null, logger', function () {
       var logger = new Logger;
 
       logger.set('env', 'testing');
-      logger.get('env').should.equal('testing');
+      expect(logger.get('env')).to.equal('testing');
     });
 
     it('should only set values for existing keys', function () {
       var logger = new Logger;
 
       logger.set('aaaaa', 12);
-      should.not.exist(logger.get('aaaaa'));
+      expect(logger.get('aaaaa')).to.be.a('undefined');
     });
 
     it('should emit an event when a new value is set', function (next) {
       var logger = new Logger;
 
       logger.on('settings:env', function (value) {
-        value.should.equal('testing');
+        expect(value).to.equal('testing');
         next();
       });
 
@@ -566,7 +558,7 @@ describe('dev/null, logger', function () {
       var logger = new Logger;
 
       logger.on('settings:env', function (value) {
-        should.fail();
+        throw new Error('dafuq, dont emit on the same value');
       });
 
       logger.set('env', logger.get('env'));
@@ -578,8 +570,8 @@ describe('dev/null, logger', function () {
     it('should be enabled', function () {
       var logger = new Logger;
 
-      logger.enabled('base').should.eql(true);
-      logger.enabled('timestamp').should.eql(true);
+      expect(logger.enabled('base')).to.eql(true);
+      expect(logger.enabled('timestamp')).to.eql(true);
     });
 
     it('should not be enabled', function () {
@@ -588,8 +580,8 @@ describe('dev/null, logger', function () {
       logger.set('timestamp', false);
       logger.set('base', false);
 
-      logger.enabled('base').should.eql(false);
-      logger.enabled('timestamp').should.eql(false);
+      expect(logger.enabled('base')).to.eql(false);
+      expect(logger.enabled('timestamp')).to.eql(false);
     });
   });
 });

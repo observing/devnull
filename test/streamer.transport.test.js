@@ -1,33 +1,33 @@
-/*globals it:true, describe:true, Transport:true, fixtures:true, Logger:true */
+/*globals it:true, describe:true, Transport:true, fixtures:true, Logger:true, expect:true */
 /**!
  * dev/null
- * @copyright (c) 2011 observe.it (observe.it) <arnout@observe.com>
+ * @copyright (c) 2012 observe.it (observe.it) <arnout@observe.com>
  * mit licensed
  */
 
 var Stream = require('../transports').stream;
 
 describe('streamer.transport', function () {
-  "use strict";
+  'use strict';
 
   it('should be an transport instance', function () {
     var streamy = new Stream();
 
-    streamy.should.be.an.instanceof(Transport);
+    expect(streamy).to.be.an.instanceof(Transport);
   });
 
   it('should have streamer as name', function () {
     var streamy = new Stream();
 
-    streamy.name.should.be.a('string');
-    streamy.name.should.equal('streamer');
+    expect(streamy.name).to.be.a('string');
+    expect(streamy.name).to.equal('streamer');
   });
 
   it('should have all required functions', function () {
     var streamy = new Stream();
 
-    streamy.should.respondTo('write');
-    streamy.should.respondTo('close');
+    expect(streamy).to.respondTo('write');
+    expect(streamy).to.respondTo('close');
   });
 
   it('should work with different streams', function () {
@@ -36,13 +36,13 @@ describe('streamer.transport', function () {
             stream: writeStream
         });
 
-    streamy.stream.should.equal(writeStream);
+    expect(streamy.stream).to.equal(writeStream);
   });
 
   it('should default to stdout', function () {
     var streamy = new Stream();
 
-    streamy.stream.should.equal(process.stdout);
+    expect(streamy.stream).to.equal(process.stdout);
   });
 
   describe("#write", function () {
@@ -57,7 +57,7 @@ describe('streamer.transport', function () {
       });
 
       logger.log('testing testing');
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
 
     it('should write to writable streams', function () {
@@ -73,7 +73,7 @@ describe('streamer.transport', function () {
       });
 
       logger.log('testing testing');
-      asserts.should.equal(0);
+      expect(asserts).to.equal(0);
     });
   });
 
@@ -89,8 +89,7 @@ describe('streamer.transport', function () {
       });
 
       logger.remove(Stream);
-
-      asserts.should.equal(1);
+      expect(asserts).to.equal(1);
     });
   });
 });

@@ -13,13 +13,13 @@
         "colors": "0.6.0-1"
     }
   , "devDependencies": {
-        "mocha": "*"
-      , "should": "0.3.2"
+        "mocha": "1.7.3"
+      , "chai": "1.4.0"
       , "long-stack-traces": "0.1.2"
       , "mongodb": "0.9.9-8"
     }
   , "main": "lib/logger"
   , "scripts": {
-        "test": "make test"
+        "test": "./node_modules/.bin/mocha $(find test -name '*.test.js')"
     }
 }
