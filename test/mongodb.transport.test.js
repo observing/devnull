@@ -115,7 +115,7 @@ describe('mongodb.transport', function () {
         logger.remove(MongoDB);
 
         expect(log.type).equal('log');
-        expect(log).to.not.have.property('stamp');
+        expect(log).to.have.property('stamp');
         expect(log.level).to.equal(Logger.levels[log.type]);
         expect(Array.isArray(log.args)).to.equal(true);
 
