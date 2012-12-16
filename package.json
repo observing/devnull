@@ -13,10 +13,10 @@
         "colors": "0.6.0-1"
     }
   , "devDependencies": {
-        "mocha": "1.7.3"
+        "mocha": "1.7.4"
       , "chai": "1.4.0"
       , "long-stack-traces": "0.1.2"
-      , "mongodb": "0.9.9-8"
+      , "mongodb": "1.2.5"
     }
   , "main": "lib/logger"
   , "scripts": {
