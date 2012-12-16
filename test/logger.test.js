@@ -584,4 +584,139 @@ describe('dev/null, logger', function () {
       expect(logger.enabled('timestamp')).to.eql(false);
     });
   });
+
+  describe('#disabled', function () {
+    it('should be not be disabled', function () {
+      var logger = new Logger;
+
+      expect(logger.disabled('base')).to.eql(false);
+      expect(logger.disabled('timestamp')).to.eql(false);
+    });
+
+    it('should be disabled', function () {
+      var logger = new Logger;
+
+      logger.set('timestamp', false);
+      logger.set('base', false);
+
+      expect(logger.disabled('base')).to.eql(true);
+      expect(logger.disabled('timestamp')).to.eql(true);
+    });
+  });
+
+  describe('#ignore', function () {
+    it('should be chainable', function () {
+      var logger = new Logger;
+
+      expect(logger.ignore(__filename)).to.equal(logger);
+    });
+
+    it('should ignore the current file', function () {
+      var logger = new Logger({ notification: 10 })
+        , emits = 0;
+
+      logger.on('info', function () {
+        emits++;
+      });
+
+      // ensure that normal logs work
+      logger.info('foo');
+      expect(emits).to.equal(1);
+
+      logger.ignore(__filename);
+      logger.info('foo');
+
+      // should not increase as this log should be ignored
+      expect(emits).to.equal(1);
+    });
+  });
+
+  describe('#unignore', function () {
+    it('should be chainable', function () {
+      var logger = new Logger;
+
+      expect(logger.unignore(__filename)).to.equal(logger);
+    });
+
+    it('should unignore the current file', function () {
+      var logger = new Logger({ notification: 10 })
+        , emits = 0;
+
+      logger.on('info', function () {
+        emits++;
+      });
+
+      // ensure that normal logs work
+      logger.info('foo');
+      expect(emits).to.equal(1);
+
+      logger.ignore(__filename);
+      logger.info('foo');
+      expect(emits).to.equal(1);
+
+      // unignore, and it should increase the emit's again
+      logger.unignore(__filename);
+      logger.info('foo');
+      expect(emits).to.equal(2);
+    });
+  });
+
+  describe('#ignoring', function () {
+    it('should not be ignoring a random file', function () {
+      var logger = new Logger;
+
+      expect(logger.ignoring('adfaslfkjasd;lfjslf')).to.equal(false);
+    });
+
+    it('should be ignoring the current file', function () {
+      var logger = new Logger;
+
+      logger.ignore(__filename);
+      expect(logger.ignoring(__filename)).to.equal(true);
+    });
+
+    it('should not be ignoring the current file', function () {
+      var logger = new Logger;
+
+      logger.ignore(__filename);
+      expect(logger.ignoring(__filename)).to.equal(true);
+      logger.unignore(__filename);
+      expect(logger.ignoring(__filename)).to.equal(false);
+    });
+  });
+
+  describe('#format', function () {
+    it('should format strings', function () {
+      var logger = new Logger;
+
+      expect(logger.format('foo %s', 'bar')).to.equal('foo bar');
+      expect(logger.format('foo %s baz %s', 'bar', 'lol')).to.equal('foo bar baz lol');
+      expect(logger.format('foo %s', 1)).to.equal('foo 1');
+    });
+
+    it('should format json', function () {
+      var logger = new Logger;
+
+      var arr = [1, 2]
+        , obj = { foo: 'bar' }
+        , nest = { arr: arr };
+
+      expect(logger.format('hi %j', arr)).to.equal('hi ' + JSON.stringify(arr));
+      expect(logger.format('hi %j', obj)).to.equal('hi ' + JSON.stringify(obj));
+      expect(logger.format('hi %j', nest)).to.equal('hi ' + JSON.stringify(nest));
+    });
+
+    it('should format digits', function () {
+      var logger = new Logger;
+
+      expect(logger.format('%d + %d = %d', 1,2,3)).to.equal('1 + 2 = 3');
+    });
+
+    it('should escape %', function () {
+      var logger = new Logger;
+
+      expect(logger.format('wassup %')).to.equal('wassup %');
+      expect(logger.format('wassup %%')).to.equal('wassup %%');
+    });
+  });
 });
