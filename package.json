@@ -1,9 +1,9 @@
 {
     "name": "devnull"
-  , "version": "0.0.9"
+  , "version": "0.0.10"
   , "description": "A simple logger with automatic function detection."
-  , "homepage": "http://observer.no.de"
-  , "keywords": ["log", "logger", "logging", "dev/null"]
+  , "homepage": "http://observe.it"
+  , "keywords": ["log", "logger", "logging", "dev/null", "debug", "debugger", "sysadmin", "tools"]
   , "author": "Arnout Kazemier <arnout@observe.it>"
   , "repository": {
           "type": "git"
