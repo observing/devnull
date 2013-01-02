@@ -1,10 +1,9 @@
 /*globals it:true, describe:true, Transport:true, fixtures:true, Logger:true, expect:true */
 /**!
  * dev/null
- * @copyright (c) 2012 observe.it (observe.it) <arnout@observe.com>
- * mit licensed
+ * @copyright (c) 2013 Observe.it (http://observe.it) <opensource@observe.it>
+ * MIT Licensed
  */
-
 var MongoDB = require('../transports').mongodb
   , mongodb = require('mongodb')
   , url = fixtures.mongodb;

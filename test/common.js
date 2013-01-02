@@ -1,7 +1,8 @@
 'use strict';
 
 /**!
- * @copyright (c) 2012 Observe.it (observe.it) <arnout@observe.com>
+ * dev/null
+ * @copyright (c) 2013 Observe.it (http://observe.it) <opensource@observe.it>
  * MIT Licensed
  */
 var EventEmitter = require('events').EventEmitter

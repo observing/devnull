@@ -2,7 +2,7 @@
 
 /**!
  * dev/null
- * @copyright (c) 2012 Observer (observer.no.de) <info@3rd-Eden.com>
+ * @copyright (c) 2013 Observe.it (http://observe.it) <opensource@observe.it>
  * MIT Licensed
  */
 
