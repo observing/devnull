@@ -16,7 +16,7 @@
         "mocha": "1.7.4"
       , "chai": "1.4.0"
       , "long-stack-traces": "0.1.2"
-      , "mongodb": "1.2.5"
+      , "mongodb": "1.2.x"
     }
   , "main": "lib/logger"
   , "scripts": {
