@@ -141,7 +141,7 @@ var Logger = module.exports = function devnull(options) {
 
   // Do we need to supply a default logging library?
   if (this.base) {
-    this.use(require('../transports/stream'));
+    this.use(require('./transports/stream'));
   }
 
   // Setup any ignore's that were set using the IGNORE env variable.
@@ -563,7 +563,7 @@ Logger.prototype.namespace = function namespace(trace, args, filename) {
  * @api public
  */
 Logger.version = Logger.prototype.version = JSON.parse(
-    require('fs').readFileSync(__dirname + '/../package.json')
+    require('fs').readFileSync(require('path').join(__dirname, 'package.json'))
 ).version;
 
 /**
