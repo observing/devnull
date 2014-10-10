@@ -6,8 +6,16 @@
  * MIT Licensed
  */
 var Transport = require('./transport')
-  , mongodb = require('mongodb')
-  , os = require('os');
+  , os = require('os')
+  , mongodb;
+
+try {
+  mongodb = require('mongodb');
+} catch (e) {
+  throw new Error(
+    'The mongodb module is required for the transporter but not installed. Run npm install --save mongodb'
+  );
+}
 
 /**
  * The MongoDB transport.
