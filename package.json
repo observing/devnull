@@ -25,7 +25,7 @@
     "mocha": "1.7.x",
     "chai": "1.4.x",
     "long-stack-traces": "0.1.x",
-    "mongodb": "1.2.x",
+    "mongodb": "1.4.x",
     "pre-commit": "0.0.x"
   },
   "main": "lib/logger",
