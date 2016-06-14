@@ -5,7 +5,7 @@
  * @copyright (c) 2013 Observe.it (http://observe.it) <opensource@observe.it>
  * MIT Licensed
  */
-var EventEmitter = process.EventEmitter;
+var EventEmitter = require('events').EventEmitter;
 
 /**
  * Strict type checking.
